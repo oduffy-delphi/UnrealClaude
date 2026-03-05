@@ -1,0 +1,1708 @@
+[
+  {
+    "name": "spawn_actor",
+    "description": "PREFERRED: Use this tool to add actors to the scene. Do not write Python scripts \u00e2\u20ac\u201d call this tool directly.\n\nSpawn a new actor in the current level. Use this to add objects like lights, meshes, characters, or custom Blueprints to your scene.\n\nCommon class paths:\n- 'PointLight' or '/Script/Engine.PointLight' - Point light source\n- 'SpotLight' - Spotlight source\n- 'DirectionalLight' - Directional/sun light\n- 'StaticMeshActor' - Static mesh placeholder\n- 'CameraActor' - Camera\n- 'PlayerStart' - Player spawn point\n- '/Game/Blueprints/BP_MyActor' - Custom Blueprint actors\n\nReturns: Actor name, class, label, and spawn location.",
+    "parameters": [
+      {
+        "name": "class",
+        "type": "string",
+        "description": "The class path to spawn (e.g., '/Script/Engine.PointLight' or 'StaticMeshActor')",
+        "required": true
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "description": "Optional name for the spawned actor",
+        "required": false
+      },
+      {
+        "name": "location",
+        "type": "object",
+        "description": "Spawn location {x, y, z}",
+        "required": false,
+        "default": "{\"x\":0,\"y\":0,\"z\":0}"
+      },
+      {
+        "name": "rotation",
+        "type": "object",
+        "description": "Spawn rotation {pitch, yaw, roll}",
+        "required": false,
+        "default": "{\"pitch\":0,\"yaw\":0,\"roll\":0}"
+      },
+      {
+        "name": "scale",
+        "type": "object",
+        "description": "Spawn scale {x, y, z}",
+        "required": false,
+        "default": "{\"x\":1,\"y\":1,\"z\":1}"
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "get_level_actors",
+    "description": "PREFERRED: Use this tool to discover what actors exist in the current level.\n\nQuery actors in the current level with optional filtering. By default returns brief info (name, label, class). Set brief=false for full transform data.\n\nFilter examples:\n- class_filter='PointLight' - Find all point lights\n- class_filter='StaticMeshActor' - Find all static meshes\n- name_filter='Player' - Find actors with 'Player' in name\n\nReturns: Array of actors. Use offset/limit for pagination on large levels.",
+    "parameters": [
+      {
+        "name": "class_filter",
+        "type": "string",
+        "description": "Optional class name to filter actors (e.g., 'StaticMeshActor', 'PointLight')",
+        "required": false
+      },
+      {
+        "name": "name_filter",
+        "type": "string",
+        "description": "Optional substring to filter actors by name",
+        "required": false
+      },
+      {
+        "name": "include_hidden",
+        "type": "boolean",
+        "description": "Include hidden actors in results",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "brief",
+        "type": "boolean",
+        "description": "Return brief info (name/label/class only). Set false for full transform data (default: true)",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "limit",
+        "type": "number",
+        "description": "Maximum number of actors to return (1-1000, default: 25)",
+        "required": false,
+        "default": "25"
+      },
+      {
+        "name": "offset",
+        "type": "number",
+        "description": "Number of actors to skip for pagination",
+        "required": false,
+        "default": "0"
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "set_property",
+    "description": "Set any property value on an actor, including component properties.\n\nThis is a powerful tool for modifying actor settings that aren't covered by other tools. Use dot notation to access nested properties and components.\n\nProperty path examples:\n- 'bHidden' - Actor visibility\n- 'Tags' - Actor tags array\n- 'LightComponent.Intensity' - Light intensity\n- 'LightComponent.LightColor' - Light color {R, G, B, A}\n- 'StaticMeshComponent.RelativeScale3D' - Mesh scale\n- 'RootComponent.RelativeLocation' - Root position\n\nValue types: strings, numbers, booleans, objects (FVector, FRotator, FLinearColor), arrays.\n\nReturns: Confirmation of property change.",
+    "parameters": [
+      {
+        "name": "actor_name",
+        "type": "string",
+        "description": "The name of the actor to modify",
+        "required": true
+      },
+      {
+        "name": "property",
+        "type": "string",
+        "description": "The property path to set (e.g., 'RelativeLocation', 'LightComponent.Intensity')",
+        "required": true
+      },
+      {
+        "name": "value",
+        "type": "any",
+        "description": "The value to set (type depends on property)",
+        "required": true
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "run_console_command",
+    "description": "Execute an Unreal Engine console command.\n\nConsole commands provide access to engine features, debugging tools, and configuration.\n\nUseful commands:\n- 'stat fps' - Show FPS counter\n- 'stat unit' - Show frame timing\n- 'show collision' - Toggle collision visualization\n- 'show bounds' - Toggle bounding box display\n- 'r.SetRes 1920x1080' - Set resolution\n- 'slomo 0.5' - Slow motion (PIE only)\n- 'ce MyEvent' - Call custom event\n\nNote: Some commands only work in Play-In-Editor (PIE) mode.\n\nReturns: Command execution confirmation.",
+    "parameters": [
+      {
+        "name": "command",
+        "type": "string",
+        "description": "The console command to execute (e.g., 'stat fps', 'show collision')",
+        "required": true
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "delete_actors",
+    "description": "Delete actors from the current level. WARNING: This is destructive and cannot be undone via MCP.\n\nDeletion modes (use one):\n- actor_name: Delete a single actor by name\n- actor_names: Delete multiple actors by name array\n- class_filter: Delete ALL actors of a specific class (use with caution!)\n\nBest practice: Use get_level_actors first to verify which actors will be deleted.\n\nReturns: List of deleted actor names and count.",
+    "parameters": [
+      {
+        "name": "actor_names",
+        "type": "array",
+        "description": "Array of actor names to delete",
+        "required": false
+      },
+      {
+        "name": "actor_name",
+        "type": "string",
+        "description": "Single actor name to delete (alternative to actor_names)",
+        "required": false
+      },
+      {
+        "name": "class_filter",
+        "type": "string",
+        "description": "Delete all actors matching this class name",
+        "required": false
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "move_actor",
+    "description": "Transform an actor's location, rotation, and/or scale.\n\nSupports both absolute positioning (relative=false) and incremental changes (relative=true).\nOnly specify the transform components you want to change - others remain unchanged.\n\nExamples:\n- Move to position: location={x:100, y:200, z:0}\n- Rotate 90 degrees: rotation={yaw:90}, relative=true\n- Scale up 2x: scale={x:2, y:2, z:2}\n- Move forward 50 units: location={x:50}, relative=true\n\nReturns: Actor's new transform (location, rotation, scale).",
+    "parameters": [
+      {
+        "name": "actor_name",
+        "type": "string",
+        "description": "The name of the actor to transform",
+        "required": true
+      },
+      {
+        "name": "location",
+        "type": "object",
+        "description": "New location {x, y, z}. Omit to keep current.",
+        "required": false
+      },
+      {
+        "name": "rotation",
+        "type": "object",
+        "description": "New rotation {pitch, yaw, roll}. Omit to keep current.",
+        "required": false
+      },
+      {
+        "name": "scale",
+        "type": "object",
+        "description": "New scale {x, y, z}. Omit to keep current.",
+        "required": false
+      },
+      {
+        "name": "relative",
+        "type": "boolean",
+        "description": "If true, values are added to current transform instead of replacing",
+        "required": false,
+        "default": "false"
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "get_output_log",
+    "description": "Retrieve recent entries from the Unreal Engine output log.\n\nEssential for debugging and monitoring engine activity. Use filters to focus on specific issues.\n\nCommon filters:\n- 'Error' - Show only errors\n- 'Warning' - Show warnings\n- 'LogTemp' - Show UE_LOG(LogTemp, ...) output\n- 'LogBlueprint' - Blueprint-related messages\n- 'LogScript' - Script compilation messages\n- 'LogActor' - Actor lifecycle messages\n\nReturns: Array of log entries with timestamp, category, verbosity, and message.",
+    "parameters": [
+      {
+        "name": "lines",
+        "type": "number",
+        "description": "Number of recent lines to return (default: 100, max: 1000)",
+        "required": false,
+        "default": "100"
+      },
+      {
+        "name": "filter",
+        "type": "string",
+        "description": "Optional category or text filter (e.g., 'Warning', 'Error', 'LogTemp')",
+        "required": false
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "execute_script",
+    "description": "Execute custom scripts in Unreal Engine with user permission.\n\nIMPORTANT: Only use this tool when no dedicated MCP tool can accomplish the task. Prefer specific tools first: spawn_actor, move_actor, set_property, blueprint_modify, open_level, asset_search, etc. Scripts require user approval and are slower than dedicated tools.\n\nScript types:\n- 'cpp': C++ via Live Coding (auto-retries on compile failure)\n- 'python': Python script (requires Python plugin)\n- 'console': Console command batch\n- 'editor_utility': Editor Utility Widget/Blueprint\n\nIMPORTANT: Include @Description in script header for history tracking:\n/** @UnrealClaude Script\\n * @Description: What this script does */\n\nReturns: Script execution result, output, and any errors.",
+    "parameters": [
+      {
+        "name": "script_type",
+        "type": "string",
+        "description": "Type: 'cpp', 'python', 'console', or 'editor_utility'",
+        "required": true
+      },
+      {
+        "name": "script_content",
+        "type": "string",
+        "description": "The script code. MUST include @Description in header comment.",
+        "required": true
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "description": "Brief description (optional if @Description in header)",
+        "required": false
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "cleanup_scripts",
+    "description": "Remove all Claude-generated scripts and clear execution history.\n\nWARNING: This is a destructive operation that permanently deletes generated script files.\n\nUse this to:\n- Clean up before committing to version control\n- Remove temporary scripts after debugging\n- Reset script history for a fresh session\n\nAffected locations:\n- Generated C++ scripts in Source/UnrealClaude/Generated/\n- Script execution history records\n\nReturns: Count of deleted files and cleared history entries.",
+    "parameters": [],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "get_script_history",
+    "description": "Retrieve history of previously executed scripts.\n\nUse this to understand what scripts have been run in this session. Helpful for context restoration and debugging.\n\nReturns for each script:\n- Script type (cpp, python, console, editor_utility)\n- Filename (for file-based scripts)\n- Description (from @Description header)\n- Execution timestamp\n- Success/failure status\n- Error message (if failed)\n\nNote: Full script content is NOT returned for security - only metadata.",
+    "parameters": [
+      {
+        "name": "count",
+        "type": "number",
+        "description": "Number of recent scripts to return (default: 10, max: 50)",
+        "required": false,
+        "default": "10"
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "capture_viewport",
+    "description": "Capture a screenshot of the active viewport.\n\nCaptures the current view from either Play-In-Editor (if running) or the active editor viewport. Useful for visual verification of scene changes.\n\nOutput: 1024x576 JPEG image encoded as base64 string.\n\nUse cases:\n- Verify actor placement after spawning/moving\n- Check lighting changes\n- Document scene state\n- Debug visual issues\n\nReturns: Base64-encoded JPEG image data.",
+    "parameters": [],
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "blueprint_query",
+    "description": "Query Blueprint information (read-only).\n\nOperations:\n- 'list': Find Blueprints in project with optional filters\n- 'inspect': Get detailed Blueprint info (variables, functions, parent class)\n- 'get_graph': Get graph structure (node count, events, connections)\n\nUse 'list' first to discover Blueprints, then 'inspect' or 'get_graph' for details.\n\nExample paths:\n- '/Game/Blueprints/BP_Character'\n- '/Game/UI/WBP_MainMenu'\n- '/Game/Characters/ABP_Hero' (Animation Blueprint)\n\nReturns: Blueprint metadata, variables, functions, and/or graph structure.",
+    "parameters": [
+      {
+        "name": "operation",
+        "type": "string",
+        "description": "Operation: 'list', 'inspect', or 'get_graph'",
+        "required": true
+      },
+      {
+        "name": "path_filter",
+        "type": "string",
+        "description": "Path prefix filter (e.g., '/Game/Blueprints/')",
+        "required": false,
+        "default": "/Game/"
+      },
+      {
+        "name": "type_filter",
+        "type": "string",
+        "description": "Blueprint type filter: 'Actor', 'Object', 'Widget', 'AnimBlueprint', etc.",
+        "required": false
+      },
+      {
+        "name": "name_filter",
+        "type": "string",
+        "description": "Name substring filter",
+        "required": false
+      },
+      {
+        "name": "limit",
+        "type": "number",
+        "description": "Maximum results to return (1-1000, default: 25)",
+        "required": false,
+        "default": "25"
+      },
+      {
+        "name": "blueprint_path",
+        "type": "string",
+        "description": "Full Blueprint asset path (required for inspect/get_graph)",
+        "required": false
+      },
+      {
+        "name": "include_variables",
+        "type": "boolean",
+        "description": "Include variable list in inspect result (default: false)",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "include_functions",
+        "type": "boolean",
+        "description": "Include function list in inspect result (default: false)",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "include_graphs",
+        "type": "boolean",
+        "description": "Include graph info in inspect result",
+        "required": false,
+        "default": "false"
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "blueprint_modify",
+    "description": "Create and modify Blueprints programmatically. Auto-compiles after changes.\n\nComplexity Levels:\nLevel 2 (Structure): 'create', 'add_variable', 'remove_variable', 'add_function', 'remove_function'\nLevel 3 (Nodes): 'add_node', 'add_nodes' (batch), 'delete_node'\nLevel 4 (Wiring): 'connect_pins', 'disconnect_pins', 'set_pin_value'\n\nWorkflow: Use blueprint_query first to understand existing structure, then modify.\n\nNode types: CallFunction, Branch, Event, VariableGet, VariableSet, Sequence, PrintString, Add, Subtract, Multiply, Divide\n\nVariable types: bool, int32, float, FString, FVector, FRotator, AActor*, UObject*, etc.\n\nReturns: Operation result with created node IDs (for subsequent connections).",
+    "parameters": [
+      {
+        "name": "operation",
+        "type": "string",
+        "description": "Operation to perform (see description for full list)",
+        "required": true
+      },
+      {
+        "name": "blueprint_path",
+        "type": "string",
+        "description": "Blueprint to modify",
+        "required": false
+      },
+      {
+        "name": "package_path",
+        "type": "string",
+        "description": "Package path for new Blueprint (e.g., '/Game/Blueprints')",
+        "required": false
+      },
+      {
+        "name": "blueprint_name",
+        "type": "string",
+        "description": "Name for new Blueprint",
+        "required": false
+      },
+      {
+        "name": "parent_class",
+        "type": "string",
+        "description": "Parent class (e.g., 'Actor', 'Pawn')",
+        "required": false
+      },
+      {
+        "name": "blueprint_type",
+        "type": "string",
+        "description": "Type: 'Normal', 'FunctionLibrary', 'Interface', 'MacroLibrary'",
+        "required": false,
+        "default": "Normal"
+      },
+      {
+        "name": "variable_name",
+        "type": "string",
+        "description": "Variable name",
+        "required": false
+      },
+      {
+        "name": "variable_type",
+        "type": "string",
+        "description": "Variable type: 'bool', 'int32', 'float', 'FString', 'FVector', 'AActor*', etc.",
+        "required": false
+      },
+      {
+        "name": "function_name",
+        "type": "string",
+        "description": "Function name",
+        "required": false
+      },
+      {
+        "name": "graph_name",
+        "type": "string",
+        "description": "Graph name (empty for default EventGraph)",
+        "required": false
+      },
+      {
+        "name": "is_function_graph",
+        "type": "boolean",
+        "description": "True to target function graphs, false for event graphs",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "node_type",
+        "type": "string",
+        "description": "Node type: 'CallFunction', 'Branch', 'Event', 'VariableGet', 'VariableSet', 'Sequence', 'PrintString', 'Add', 'Subtract', 'Multiply', 'Divide'",
+        "required": false
+      },
+      {
+        "name": "node_params",
+        "type": "object",
+        "description": "Node parameters: {function, target_class, event, variable, num_outputs}",
+        "required": false
+      },
+      {
+        "name": "pos_x",
+        "type": "number",
+        "description": "Node X position",
+        "required": false,
+        "default": "0"
+      },
+      {
+        "name": "pos_y",
+        "type": "number",
+        "description": "Node Y position",
+        "required": false,
+        "default": "0"
+      },
+      {
+        "name": "node_id",
+        "type": "string",
+        "description": "Node ID (for delete/connect operations)",
+        "required": false
+      },
+      {
+        "name": "nodes",
+        "type": "array",
+        "description": "Array of node specs: [{type, params, pos_x, pos_y, pin_values}]",
+        "required": false
+      },
+      {
+        "name": "connections",
+        "type": "array",
+        "description": "Array of connections: [{from_node, from_pin, to_node, to_pin}] (use indices or node IDs)",
+        "required": false
+      },
+      {
+        "name": "source_node_id",
+        "type": "string",
+        "description": "Source node ID",
+        "required": false
+      },
+      {
+        "name": "source_pin",
+        "type": "string",
+        "description": "Source pin name (empty for auto exec)",
+        "required": false
+      },
+      {
+        "name": "target_node_id",
+        "type": "string",
+        "description": "Target node ID",
+        "required": false
+      },
+      {
+        "name": "target_pin",
+        "type": "string",
+        "description": "Target pin name (empty for auto exec)",
+        "required": false
+      },
+      {
+        "name": "pin_name",
+        "type": "string",
+        "description": "Pin name to set value",
+        "required": false
+      },
+      {
+        "name": "pin_value",
+        "type": "string",
+        "description": "Default value to set",
+        "required": false
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "anim_blueprint_modify",
+    "description": "Comprehensive Animation Blueprint modification tool.\n\nState Machine Operations:\n- 'get_info': Overview of AnimBlueprint structure\n- 'get_state_machine': Detailed state machine info\n- 'create_state_machine': Create new state machine\n- 'add_state', 'remove_state': Manage states\n- 'set_entry_state': Set entry state for state machine\n- 'add_transition', 'remove_transition': Manage transitions\n\nTransition Configuration:\n- 'set_transition_duration': Set blend duration\n- 'set_transition_priority': Set evaluation priority\n\nCondition Graph (transition logic):\n- 'add_condition_node': Add logic node (TimeRemaining, Greater, Less, And, Or, Not, GetVariable)\n- 'delete_condition_node', 'connect_condition_nodes', 'connect_to_result'\n\nNode/Pin Introspection (NEW):\n- 'get_transition_nodes': List all nodes in transition graph(s) with pins\n- 'inspect_node_pins': Get detailed pin info for a node (types, values, connections)\n- 'set_pin_default_value': Set pin value with type validation\n- 'add_comparison_chain': Add GetVariable->Comparison->Result (auto-ANDs with existing)\n- 'validate_blueprint': Return compile errors with full diagnostics\n\nVisualization (NEW):\n- 'get_state_machine_diagram': Generate ASCII diagram and enhanced JSON for state machine\n\nBulk Operations:\n- 'setup_transition_conditions': Setup conditions for multiple transitions using pattern matching\n\nAnimGraph Connection:\n- 'connect_state_machine_to_output': Connect State Machine to AnimGraph Output Pose\n\nAnimation Assignment:\n- 'set_state_animation': Assign AnimSequence, BlendSpace, BlendSpace1D, or Montage\n- 'find_animations': Search compatible animation assets\n\n- 'batch': Execute multiple operations atomically",
+    "parameters": [
+      {
+        "name": "blueprint_path",
+        "type": "string",
+        "description": "Path to the Animation Blueprint (e.g., '/Game/Characters/ABP_Character')",
+        "required": true
+      },
+      {
+        "name": "operation",
+        "type": "string",
+        "description": "Operation: get_info, get_state_machine, get_state_machine_diagram, create_state_machine, add_state, remove_state, set_entry_state, add_transition, remove_transition, set_transition_duration, set_transition_priority, add_condition_node, delete_condition_node, connect_condition_nodes, connect_to_result, connect_state_machine_to_output, set_state_animation, find_animations, batch, get_transition_nodes, inspect_node_pins, set_pin_default_value, add_comparison_chain, validate_blueprint",
+        "required": true
+      },
+      {
+        "name": "state_machine",
+        "type": "string",
+        "description": "State machine name (for state/transition operations)",
+        "required": false
+      },
+      {
+        "name": "state_name",
+        "type": "string",
+        "description": "State name (for state operations)",
+        "required": false
+      },
+      {
+        "name": "from_state",
+        "type": "string",
+        "description": "Source state name (for transitions)",
+        "required": false
+      },
+      {
+        "name": "to_state",
+        "type": "string",
+        "description": "Target state name (for transitions)",
+        "required": false
+      },
+      {
+        "name": "position",
+        "type": "object",
+        "description": "Node position {x, y}",
+        "required": false,
+        "default": "{\"x\":0,\"y\":0}"
+      },
+      {
+        "name": "is_entry_state",
+        "type": "boolean",
+        "description": "Whether this state is the entry state",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "duration",
+        "type": "number",
+        "description": "Transition blend duration in seconds",
+        "required": false
+      },
+      {
+        "name": "priority",
+        "type": "number",
+        "description": "Transition priority (higher = checked first)",
+        "required": false
+      },
+      {
+        "name": "node_type",
+        "type": "string",
+        "description": "Condition node type: TimeRemaining, Greater, Less, GreaterEqual, LessEqual, Equal, NotEqual, And, Or, Not, GetVariable",
+        "required": false
+      },
+      {
+        "name": "node_params",
+        "type": "object",
+        "description": "Condition node parameters (e.g., {variable_name} for GetVariable)",
+        "required": false
+      },
+      {
+        "name": "node_id",
+        "type": "string",
+        "description": "Node ID for delete_condition_node operation",
+        "required": false
+      },
+      {
+        "name": "source_node_id",
+        "type": "string",
+        "description": "Source node ID for connection",
+        "required": false
+      },
+      {
+        "name": "source_pin",
+        "type": "string",
+        "description": "Source pin name",
+        "required": false
+      },
+      {
+        "name": "target_node_id",
+        "type": "string",
+        "description": "Target node ID for connection",
+        "required": false
+      },
+      {
+        "name": "target_pin",
+        "type": "string",
+        "description": "Target pin name",
+        "required": false
+      },
+      {
+        "name": "animation_type",
+        "type": "string",
+        "description": "Animation type: sequence, blendspace, blendspace1d, montage",
+        "required": false
+      },
+      {
+        "name": "animation_path",
+        "type": "string",
+        "description": "Path to animation asset",
+        "required": false
+      },
+      {
+        "name": "parameter_bindings",
+        "type": "object",
+        "description": "BlendSpace parameter bindings {\"X\": \"Speed\", \"Y\": \"Direction\"}",
+        "required": false
+      },
+      {
+        "name": "search_pattern",
+        "type": "string",
+        "description": "Animation search pattern (for find_animations)",
+        "required": false
+      },
+      {
+        "name": "asset_type",
+        "type": "string",
+        "description": "Asset type filter: AnimSequence, BlendSpace, BlendSpace1D, Montage, All",
+        "required": false,
+        "default": "All"
+      },
+      {
+        "name": "operations",
+        "type": "array",
+        "description": "Array of operations for batch mode",
+        "required": false
+      },
+      {
+        "name": "variable_name",
+        "type": "string",
+        "description": "Blueprint variable name (for add_comparison_chain)",
+        "required": false
+      },
+      {
+        "name": "comparison_type",
+        "type": "string",
+        "description": "Comparison type: Greater, Less, GreaterEqual, LessEqual, Equal, NotEqual (for add_comparison_chain)",
+        "required": false
+      },
+      {
+        "name": "compare_value",
+        "type": "string",
+        "description": "Value to compare against (for add_comparison_chain)",
+        "required": false
+      },
+      {
+        "name": "pin_value",
+        "type": "string",
+        "description": "Default value for the pin (for set_pin_default_value)",
+        "required": false
+      },
+      {
+        "name": "pin_name",
+        "type": "string",
+        "description": "Pin name to set value (for set_pin_default_value)",
+        "required": false
+      },
+      {
+        "name": "rules",
+        "type": "array",
+        "description": "Array of condition rules for setup_transition_conditions. Each rule: {match: {from, to}, conditions: [...], logic: 'AND'|'OR'}",
+        "required": false
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "asset_search",
+    "description": "PREFERRED: Use this tool instead of file-system searches to find project assets.\n\nSearch for assets in the Unreal project by class, path, or name. All filters are optional and combine with AND logic.\n\nFilter examples:\n- class_filter='Blueprint' - Find all blueprints\n- class_filter='StaticMesh', path_filter='/Game/Environment/' - Static meshes in folder\n- name_pattern='Player' - Assets with 'Player' in name\n- path_filter='/Game/Characters/', name_pattern='Enemy' - Combined filters\n\nCommon class types: Blueprint, StaticMesh, SkeletalMesh, Texture2D, Material, MaterialInstance, AnimSequence, AnimBlueprint, SoundWave, ParticleSystem, NiagaraSystem\n\nReturns: Array of assets with path, name, class, and package_path. Use limit/offset for pagination on large result sets.",
+    "parameters": [
+      {
+        "name": "class_filter",
+        "type": "string",
+        "description": "Asset class to filter by (e.g., 'Blueprint', 'StaticMesh', 'Texture2D')",
+        "required": false
+      },
+      {
+        "name": "path_filter",
+        "type": "string",
+        "description": "Path prefix to search within (e.g., '/Game/Characters/'). Searches recursively. Default: '/Game/'",
+        "required": false,
+        "default": "/Game/"
+      },
+      {
+        "name": "name_pattern",
+        "type": "string",
+        "description": "Substring to match in asset names (case-insensitive)",
+        "required": false
+      },
+      {
+        "name": "limit",
+        "type": "number",
+        "description": "Maximum results to return (1-1000, default: 25)",
+        "required": false,
+        "default": "25"
+      },
+      {
+        "name": "offset",
+        "type": "number",
+        "description": "Number of results to skip for pagination (default: 0)",
+        "required": false,
+        "default": "0"
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "asset_dependencies",
+    "description": "Get all assets that a specific asset depends on (its dependencies).\n\nUse this tool to understand what assets would need to be loaded together with a target asset. Useful for:\n- Understanding asset relationships\n- Checking what assets are bundled together\n- Finding shared dependencies between assets\n\nExample asset paths:\n- '/Game/Blueprints/BP_Player'\n- '/Game/Characters/Meshes/SK_Character'\n- '/Game/Materials/M_Ground'\n\nReturns: Array of dependency asset paths with their dependency type.",
+    "parameters": [
+      {
+        "name": "asset_path",
+        "type": "string",
+        "description": "Full asset path (e.g., '/Game/Blueprints/BP_Player')",
+        "required": true
+      },
+      {
+        "name": "include_soft",
+        "type": "boolean",
+        "description": "Include soft references in addition to hard dependencies (default: true)",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "limit",
+        "type": "number",
+        "description": "Maximum results to return (1-1000, default: 25)",
+        "required": false,
+        "default": "25"
+      },
+      {
+        "name": "offset",
+        "type": "number",
+        "description": "Number of results to skip for pagination (default: 0)",
+        "required": false,
+        "default": "0"
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "asset_referencers",
+    "description": "Get all assets that reference a specific asset (its referencers).\n\nUse this tool to find what would be affected if you modify or delete an asset. Essential for impact analysis before making changes.\n\nCommon use cases:\n- Find all materials using a specific texture\n- Find all blueprints using a specific mesh\n- Check if an asset is safe to delete\n- Understand how assets are connected\n\nExample asset paths:\n- '/Game/Textures/T_Icon' - Find what uses this texture\n- '/Game/Meshes/SM_Rock' - Find what uses this mesh\n- '/Game/Materials/M_Ground' - Find what uses this material\n\nReturns: Array of referencer asset paths with their class type.",
+    "parameters": [
+      {
+        "name": "asset_path",
+        "type": "string",
+        "description": "Full asset path to find referencers for (e.g., '/Game/Textures/T_Icon')",
+        "required": true
+      },
+      {
+        "name": "include_soft",
+        "type": "boolean",
+        "description": "Include soft references in addition to hard references (default: true)",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "limit",
+        "type": "number",
+        "description": "Maximum results to return (1-1000, default: 25)",
+        "required": false,
+        "default": "25"
+      },
+      {
+        "name": "offset",
+        "type": "number",
+        "description": "Number of results to skip for pagination (default: 0)",
+        "required": false,
+        "default": "0"
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "enhanced_input",
+    "description": "Create and modify Enhanced Input assets (InputAction, InputMappingContext).\n\nOperations:\n- 'create_input_action': Create new InputAction asset\n- 'create_mapping_context': Create new InputMappingContext asset\n- 'add_mapping': Add key binding to mapping context\n- 'remove_mapping': Remove key binding from context\n- 'add_trigger': Add trigger (Hold, Tap, etc.) to mapping\n- 'add_modifier': Add modifier (Negate, Scale, etc.) to mapping\n- 'query_context': List all mappings in a context\n- 'query_action': Get InputAction details\n\nValue Types: 'Digital' (bool), 'Axis1D' (float), 'Axis2D' (Vector2D), 'Axis3D' (Vector)\n\nTrigger Types: 'Pressed', 'Released', 'Down', 'Hold', 'HoldAndRelease', 'Tap', 'Pulse', 'ChordAction'\n\nModifier Types: 'Negate', 'Swizzle', 'Scalar', 'DeadZone'\n\nKeys: Standard UE key names (SpaceBar, W, A, S, D, LeftMouseButton, Gamepad_FaceButton_Bottom, etc.)\n\nDefault asset path: /Game/Input/ (customizable via package_path)",
+    "parameters": [
+      {
+        "name": "operation",
+        "type": "string",
+        "description": "Operation to perform (see description)",
+        "required": true
+      },
+      {
+        "name": "package_path",
+        "type": "string",
+        "description": "Package path for new assets (default: '/Game/Input')",
+        "required": false,
+        "default": "/Game/Input"
+      },
+      {
+        "name": "action_name",
+        "type": "string",
+        "description": "Name for new InputAction asset (e.g., 'IA_Jump')",
+        "required": false
+      },
+      {
+        "name": "context_name",
+        "type": "string",
+        "description": "Name for new InputMappingContext asset (e.g., 'IMC_Default')",
+        "required": false
+      },
+      {
+        "name": "value_type",
+        "type": "string",
+        "description": "InputAction value type: 'Digital', 'Axis1D', 'Axis2D', 'Axis3D'",
+        "required": false,
+        "default": "Digital"
+      },
+      {
+        "name": "context_path",
+        "type": "string",
+        "description": "Path to InputMappingContext asset",
+        "required": false
+      },
+      {
+        "name": "action_path",
+        "type": "string",
+        "description": "Path to InputAction asset",
+        "required": false
+      },
+      {
+        "name": "key",
+        "type": "string",
+        "description": "Key name (e.g., 'SpaceBar', 'W', 'Gamepad_FaceButton_Bottom')",
+        "required": false
+      },
+      {
+        "name": "trigger_type",
+        "type": "string",
+        "description": "Trigger type: 'Pressed', 'Released', 'Down', 'Hold', 'HoldAndRelease', 'Tap', 'Pulse', 'ChordAction'",
+        "required": false
+      },
+      {
+        "name": "hold_time",
+        "type": "number",
+        "description": "Hold duration in seconds (for Hold/HoldAndRelease triggers)",
+        "required": false,
+        "default": "0.5"
+      },
+      {
+        "name": "tap_release_time",
+        "type": "number",
+        "description": "Max release time for Tap trigger",
+        "required": false,
+        "default": "0.2"
+      },
+      {
+        "name": "pulse_interval",
+        "type": "number",
+        "description": "Interval in seconds for Pulse trigger",
+        "required": false,
+        "default": "0.1"
+      },
+      {
+        "name": "chord_action_path",
+        "type": "string",
+        "description": "Path to chord InputAction (for ChordAction trigger)",
+        "required": false
+      },
+      {
+        "name": "modifier_type",
+        "type": "string",
+        "description": "Modifier type: 'Negate', 'Swizzle', 'Scalar', 'DeadZone'",
+        "required": false
+      },
+      {
+        "name": "swizzle_order",
+        "type": "string",
+        "description": "Axis order for Swizzle: 'YXZ', 'ZYX', 'XZY', 'YZX', 'ZXY'",
+        "required": false,
+        "default": "YXZ"
+      },
+      {
+        "name": "scalar",
+        "type": "object",
+        "description": "Scale factors: {x, y, z} for Scalar modifier",
+        "required": false
+      },
+      {
+        "name": "dead_zone_lower",
+        "type": "number",
+        "description": "Lower threshold for DeadZone (0.0-1.0)",
+        "required": false,
+        "default": "0.2"
+      },
+      {
+        "name": "dead_zone_upper",
+        "type": "number",
+        "description": "Upper threshold for DeadZone (0.0-1.0)",
+        "required": false,
+        "default": "1.0"
+      },
+      {
+        "name": "dead_zone_type",
+        "type": "string",
+        "description": "DeadZone type: 'Axial', 'Radial'",
+        "required": false,
+        "default": "Axial"
+      },
+      {
+        "name": "mapping_index",
+        "type": "number",
+        "description": "Index of mapping to remove (from query_context)",
+        "required": false
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "character",
+    "description": "Query and modify ACharacter actors in the current level.\n\nOperations:\n- 'list_characters': Find all characters with optional class filter\n- 'get_character_info': Get mesh, animation, transform details\n- 'get_movement_params': Query movement component properties\n- 'set_movement_params': Modify movement values (speeds, jump, friction)\n- 'get_components': List all components on a character\n\nCharacters are identified by actor name or label.\n\nMovement properties include:\n- max_walk_speed, max_acceleration, ground_friction\n- jump_z_velocity, air_control, gravity_scale\n- max_step_height, walkable_floor_angle\n- braking_deceleration_walking, braking_friction",
+    "parameters": [
+      {
+        "name": "operation",
+        "type": "string",
+        "description": "Operation to perform (see description)",
+        "required": true
+      },
+      {
+        "name": "character_name",
+        "type": "string",
+        "description": "Character actor name or label (required for single-character ops)",
+        "required": false
+      },
+      {
+        "name": "class_filter",
+        "type": "string",
+        "description": "Filter by character class name (e.g., 'BP_PlayerCharacter')",
+        "required": false
+      },
+      {
+        "name": "limit",
+        "type": "number",
+        "description": "Max results to return (default: 100)",
+        "required": false,
+        "default": "100"
+      },
+      {
+        "name": "offset",
+        "type": "number",
+        "description": "Skip first N results (default: 0)",
+        "required": false,
+        "default": "0"
+      },
+      {
+        "name": "max_walk_speed",
+        "type": "number",
+        "description": "Maximum walking speed (cm/s)",
+        "required": false
+      },
+      {
+        "name": "max_acceleration",
+        "type": "number",
+        "description": "Maximum acceleration (cm/s^2)",
+        "required": false
+      },
+      {
+        "name": "ground_friction",
+        "type": "number",
+        "description": "Ground friction coefficient",
+        "required": false
+      },
+      {
+        "name": "jump_z_velocity",
+        "type": "number",
+        "description": "Initial jump velocity (cm/s)",
+        "required": false
+      },
+      {
+        "name": "air_control",
+        "type": "number",
+        "description": "Air control factor (0.0-1.0)",
+        "required": false
+      },
+      {
+        "name": "gravity_scale",
+        "type": "number",
+        "description": "Gravity multiplier",
+        "required": false
+      },
+      {
+        "name": "max_step_height",
+        "type": "number",
+        "description": "Maximum step height (cm)",
+        "required": false
+      },
+      {
+        "name": "walkable_floor_angle",
+        "type": "number",
+        "description": "Max floor angle for walking (degrees)",
+        "required": false
+      },
+      {
+        "name": "braking_deceleration_walking",
+        "type": "number",
+        "description": "Braking deceleration when walking (cm/s^2)",
+        "required": false
+      },
+      {
+        "name": "braking_friction",
+        "type": "number",
+        "description": "Braking friction coefficient",
+        "required": false
+      },
+      {
+        "name": "component_class",
+        "type": "string",
+        "description": "Filter components by class name",
+        "required": false
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "character_data",
+    "description": "Create and manage character configuration DataAssets and stats DataTables.\n\nDataAsset Operations:\n- 'create_character_data': Create new character config asset\n- 'query_character_data': Search character configs by name/tags\n- 'get_character_data': Get details of specific config\n- 'update_character_data': Modify existing config\n\nDataTable Operations:\n- 'create_stats_table': Create new stats DataTable\n- 'query_stats_table': Get rows from stats table\n- 'add_stats_row': Add new row to table\n- 'update_stats_row': Modify existing row\n- 'remove_stats_row': Delete row from table\n\nApplication:\n- 'apply_character_data': Apply config to runtime character\n\nDefault asset path: /Game/Characters/",
+    "parameters": [
+      {
+        "name": "operation",
+        "type": "string",
+        "description": "Operation to perform (see description)",
+        "required": true
+      },
+      {
+        "name": "package_path",
+        "type": "string",
+        "description": "Package path for new assets (default: '/Game/Characters')",
+        "required": false,
+        "default": "/Game/Characters"
+      },
+      {
+        "name": "asset_name",
+        "type": "string",
+        "description": "Name for new asset (e.g., 'DA_PlayerConfig')",
+        "required": false
+      },
+      {
+        "name": "asset_path",
+        "type": "string",
+        "description": "Full path to existing asset",
+        "required": false
+      },
+      {
+        "name": "table_path",
+        "type": "string",
+        "description": "Path to stats DataTable",
+        "required": false
+      },
+      {
+        "name": "config_id",
+        "type": "string",
+        "description": "Unique config identifier",
+        "required": false
+      },
+      {
+        "name": "display_name",
+        "type": "string",
+        "description": "Display name for config",
+        "required": false
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "description": "Config description",
+        "required": false
+      },
+      {
+        "name": "skeletal_mesh",
+        "type": "string",
+        "description": "Path to skeletal mesh asset",
+        "required": false
+      },
+      {
+        "name": "anim_blueprint",
+        "type": "string",
+        "description": "Path to animation blueprint class",
+        "required": false
+      },
+      {
+        "name": "is_player_character",
+        "type": "boolean",
+        "description": "Whether this is a player character config",
+        "required": false
+      },
+      {
+        "name": "base_walk_speed",
+        "type": "number",
+        "description": "Base walking speed (cm/s)",
+        "required": false
+      },
+      {
+        "name": "base_run_speed",
+        "type": "number",
+        "description": "Base running speed (cm/s)",
+        "required": false
+      },
+      {
+        "name": "base_jump_velocity",
+        "type": "number",
+        "description": "Base jump velocity (cm/s)",
+        "required": false
+      },
+      {
+        "name": "base_acceleration",
+        "type": "number",
+        "description": "Base acceleration (cm/s^2)",
+        "required": false
+      },
+      {
+        "name": "base_ground_friction",
+        "type": "number",
+        "description": "Base ground friction",
+        "required": false
+      },
+      {
+        "name": "base_air_control",
+        "type": "number",
+        "description": "Base air control (0-1)",
+        "required": false
+      },
+      {
+        "name": "base_gravity_scale",
+        "type": "number",
+        "description": "Base gravity scale",
+        "required": false
+      },
+      {
+        "name": "base_health",
+        "type": "number",
+        "description": "Base health value",
+        "required": false
+      },
+      {
+        "name": "base_stamina",
+        "type": "number",
+        "description": "Base stamina value",
+        "required": false
+      },
+      {
+        "name": "base_damage",
+        "type": "number",
+        "description": "Base damage value",
+        "required": false
+      },
+      {
+        "name": "base_defense",
+        "type": "number",
+        "description": "Base defense value",
+        "required": false
+      },
+      {
+        "name": "capsule_radius",
+        "type": "number",
+        "description": "Capsule collision radius",
+        "required": false
+      },
+      {
+        "name": "capsule_half_height",
+        "type": "number",
+        "description": "Capsule collision half-height",
+        "required": false
+      },
+      {
+        "name": "gameplay_tags",
+        "type": "array",
+        "description": "Array of gameplay tag names",
+        "required": false
+      },
+      {
+        "name": "row_name",
+        "type": "string",
+        "description": "Row name in DataTable",
+        "required": false
+      },
+      {
+        "name": "stats_id",
+        "type": "string",
+        "description": "Stats row identifier",
+        "required": false
+      },
+      {
+        "name": "max_health",
+        "type": "number",
+        "description": "Maximum health value",
+        "required": false
+      },
+      {
+        "name": "max_stamina",
+        "type": "number",
+        "description": "Maximum stamina value",
+        "required": false
+      },
+      {
+        "name": "walk_speed",
+        "type": "number",
+        "description": "Walk speed for stats row",
+        "required": false
+      },
+      {
+        "name": "run_speed",
+        "type": "number",
+        "description": "Run speed for stats row",
+        "required": false
+      },
+      {
+        "name": "jump_velocity",
+        "type": "number",
+        "description": "Jump velocity for stats row",
+        "required": false
+      },
+      {
+        "name": "damage_multiplier",
+        "type": "number",
+        "description": "Damage multiplier (0-10)",
+        "required": false
+      },
+      {
+        "name": "defense_multiplier",
+        "type": "number",
+        "description": "Defense multiplier (0-10)",
+        "required": false
+      },
+      {
+        "name": "xp_multiplier",
+        "type": "number",
+        "description": "XP multiplier (0-10)",
+        "required": false
+      },
+      {
+        "name": "level",
+        "type": "number",
+        "description": "Character level",
+        "required": false
+      },
+      {
+        "name": "tags",
+        "type": "array",
+        "description": "Array of tag names for stats row",
+        "required": false
+      },
+      {
+        "name": "search_name",
+        "type": "string",
+        "description": "Search filter for asset names",
+        "required": false
+      },
+      {
+        "name": "search_tags",
+        "type": "array",
+        "description": "Filter by gameplay tags",
+        "required": false
+      },
+      {
+        "name": "limit",
+        "type": "number",
+        "description": "Max results (1-1000, default: 25)",
+        "required": false,
+        "default": "25"
+      },
+      {
+        "name": "offset",
+        "type": "number",
+        "description": "Skip first N results",
+        "required": false,
+        "default": "0"
+      },
+      {
+        "name": "character_name",
+        "type": "string",
+        "description": "Target character actor name/label",
+        "required": false
+      },
+      {
+        "name": "apply_movement",
+        "type": "boolean",
+        "description": "Apply movement stats to character (default: true)",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "apply_mesh",
+        "type": "boolean",
+        "description": "Apply skeletal mesh (default: false)",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "apply_anim",
+        "type": "boolean",
+        "description": "Apply animation blueprint (default: false)",
+        "required": false,
+        "default": "false"
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "material",
+    "description": "Material instance creation and assignment operations for meshes and actors",
+    "parameters": [
+      {
+        "name": "operation",
+        "type": "string",
+        "description": "Operation: create_material_instance, set_material_parameters, set_skeletal_mesh_material, set_actor_material, get_material_info",
+        "required": true
+      },
+      {
+        "name": "asset_name",
+        "type": "string",
+        "description": "Name for the new material instance asset (for create_material_instance)",
+        "required": false
+      },
+      {
+        "name": "parent_material",
+        "type": "string",
+        "description": "Asset path to parent material (for create_material_instance)",
+        "required": false
+      },
+      {
+        "name": "package_path",
+        "type": "string",
+        "description": "Package path for new asset (default: /Game/Materials/)",
+        "required": false
+      },
+      {
+        "name": "parameters",
+        "type": "object",
+        "description": "Material parameters to set: {scalars: {name: value}, vectors: {name: {r,g,b,a}}, textures: {name: path}}",
+        "required": false
+      },
+      {
+        "name": "material_instance_path",
+        "type": "string",
+        "description": "Asset path to material instance (for set_material_parameters)",
+        "required": false
+      },
+      {
+        "name": "skeletal_mesh_path",
+        "type": "string",
+        "description": "Asset path to skeletal mesh (for set_skeletal_mesh_material)",
+        "required": false
+      },
+      {
+        "name": "material_slot",
+        "type": "integer",
+        "description": "Material slot index to set (for set_skeletal_mesh_material)",
+        "required": false
+      },
+      {
+        "name": "material_path",
+        "type": "string",
+        "description": "Asset path to material to assign (for set_skeletal_mesh_material)",
+        "required": false
+      },
+      {
+        "name": "actor_name",
+        "type": "string",
+        "description": "Name or label of the actor to assign material to (for set_actor_material)",
+        "required": false
+      },
+      {
+        "name": "asset_path",
+        "type": "string",
+        "description": "Asset path to material (for get_material_info)",
+        "required": false
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "asset",
+    "description": "Generic asset operations: set properties, save, and query assets in Content Browser",
+    "parameters": [
+      {
+        "name": "operation",
+        "type": "string",
+        "description": "Operation: set_asset_property, save_asset, get_asset_info, list_assets",
+        "required": true
+      },
+      {
+        "name": "asset_path",
+        "type": "string",
+        "description": "Asset path (e.g., /Game/Characters/MyMesh)",
+        "required": false
+      },
+      {
+        "name": "property",
+        "type": "string",
+        "description": "Property path (e.g., Materials.0.MaterialInterface, bEnableGravity)",
+        "required": false
+      },
+      {
+        "name": "value",
+        "type": "any",
+        "description": "Value to set (type must match property type)",
+        "required": false
+      },
+      {
+        "name": "save",
+        "type": "boolean",
+        "description": "Actually save to disk (default: true)",
+        "required": false
+      },
+      {
+        "name": "mark_dirty",
+        "type": "boolean",
+        "description": "Mark the asset as dirty (default: true if save is false)",
+        "required": false
+      },
+      {
+        "name": "include_properties",
+        "type": "boolean",
+        "description": "Include editable property list (default: false)",
+        "required": false
+      },
+      {
+        "name": "directory",
+        "type": "string",
+        "description": "Directory to list (e.g., /Game/Characters/)",
+        "required": false
+      },
+      {
+        "name": "class_filter",
+        "type": "string",
+        "description": "Filter by class name (e.g., SkeletalMesh, StaticMesh, Material)",
+        "required": false
+      },
+      {
+        "name": "recursive",
+        "type": "boolean",
+        "description": "Search recursively (default: false)",
+        "required": false
+      },
+      {
+        "name": "limit",
+        "type": "integer",
+        "description": "Maximum results (1-1000, default: 25)",
+        "required": false
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "open_level",
+    "description": "Open, create, save, or list level maps in the Unreal Editor.\n\nActions:\n- 'open': Load an existing map by asset path (e.g., '/Game/Maps/MyLevel')\n- 'new': Create a new blank map, or from a template if 'template' is specified\n- 'save_as': Save the current level to a specified path (e.g., '/Game/Maps/MyLevel')\n- 'list_templates': List all available map templates\n\nThe editor will prompt to save unsaved changes before switching levels.\n\nReturns: The loaded map name and world info, save result, or template list.",
+    "parameters": [
+      {
+        "name": "action",
+        "type": "string",
+        "description": "Action to perform: 'open', 'new', 'save_as', or 'list_templates'",
+        "required": true
+      },
+      {
+        "name": "level_path",
+        "type": "string",
+        "description": "Asset path of the level to open (required for 'open' action, e.g., '/Game/Maps/MyLevel')",
+        "required": false
+      },
+      {
+        "name": "template",
+        "type": "string",
+        "description": "Template name for 'new' action (omit for blank map). Use 'list_templates' to see available names.",
+        "required": false
+      },
+      {
+        "name": "save_current",
+        "type": "boolean",
+        "description": "For 'new' action: whether to prompt to save the current level first (default: true). The 'open' action always uses the engine's built-in save prompt.",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "save_path",
+        "type": "string",
+        "description": "Asset path to save the level to (required for 'save_as' action, e.g., '/Game/Maps/MyLevel')",
+        "required": false
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "task_submit",
+    "description": "Submit an MCP tool for async background execution.\n\nUse this for long-running operations that might timeout with synchronous execution. Returns a task_id that you can use with task_status and task_result to track progress and retrieve results.\n\nWorkflow:\n1. Call task_submit with tool name and parameters\n2. Poll task_status with the returned task_id\n3. When status is 'completed', call task_result to get output\n\nExample:\n  task_submit(tool_name='asset_search', params={class_filter: 'Blueprint'})\n  -> Returns: {task_id: '...'}\n  task_status(task_id='...')\n  -> Returns: {status: 'running', progress: 50}\n  task_result(task_id='...')\n  -> Returns: {success: true, data: {...}}",
+    "parameters": [
+      {
+        "name": "tool_name",
+        "type": "string",
+        "description": "Name of the MCP tool to execute asynchronously",
+        "required": true
+      },
+      {
+        "name": "params",
+        "type": "object",
+        "description": "Parameters to pass to the tool (same as calling the tool directly)",
+        "required": false
+      },
+      {
+        "name": "timeout_ms",
+        "type": "number",
+        "description": "Custom timeout in milliseconds (default: 120000 = 2 minutes)",
+        "required": false,
+        "default": "120000"
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "task_status",
+    "description": "Get the status of an async task.\n\nReturns the current status, progress, and timing information for a task.\n\nStatus values:\n- 'pending': Task is queued but not yet started\n- 'running': Task is currently executing\n- 'completed': Task finished successfully\n- 'failed': Task encountered an error\n- 'cancelled': Task was cancelled\n- 'timed_out': Task exceeded its timeout\n\nFor completed tasks, use task_result to get the full output.",
+    "parameters": [
+      {
+        "name": "task_id",
+        "type": "string",
+        "description": "Task ID returned from task_submit",
+        "required": true
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "task_result",
+    "description": "Get the result of a completed async task.\n\nReturns the full result data including success/failure status, message, and output data.\nOnly works for tasks in a terminal state (completed, failed, cancelled, timed_out).\n\nFor pending or running tasks, this will return an error - use task_status to poll.",
+    "parameters": [
+      {
+        "name": "task_id",
+        "type": "string",
+        "description": "Task ID returned from task_submit",
+        "required": true
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "task_list",
+    "description": "List all async tasks in the queue.\n\nReturns task IDs, tool names, status, and timing information for all tasks. Useful for monitoring and debugging async operations.\n\nOptions:\n- include_completed: Whether to include finished tasks (default: true)\n- limit: Maximum number of tasks to return (default: 50)",
+    "parameters": [
+      {
+        "name": "include_completed",
+        "type": "boolean",
+        "description": "Include completed/failed/cancelled tasks (default: true)",
+        "required": false,
+        "default": "true"
+      },
+      {
+        "name": "limit",
+        "type": "number",
+        "description": "Maximum number of tasks to return (default: 50)",
+        "required": false,
+        "default": "50"
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "task_cancel",
+    "description": "Cancel an async task.\n\nFor pending tasks: Immediately marks the task as cancelled.\nFor running tasks: Requests cancellation - the task will be cancelled at the next opportunity.\nFor completed tasks: Returns an error (cannot cancel completed tasks).\n\nNote: Some tools may not check for cancellation during execution, so running tasks may still complete before the cancellation takes effect.",
+    "parameters": [
+      {
+        "name": "task_id",
+        "type": "string",
+        "description": "Task ID to cancel",
+        "required": true
+      }
+    ],
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  }
+]
