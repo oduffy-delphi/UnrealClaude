@@ -33,9 +33,9 @@ yarn-error.log
 # Keep package-lock.json for reproducible builds
 # package-lock.json
 
-# Claude Code session data
-.claude/
-CLAUDE.md
+# Claude — track .claude/ (commands, hooks, handoffs, plans, settings)
+# Only ignore local machine-specific settings
+.claude/settings.local.json
 
 # macOS
 .DS_Store
